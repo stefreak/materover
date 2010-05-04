@@ -1,5 +1,6 @@
 long lasttime;
 byte SYNCBYTE = 0x58;
+int SECURETIMEOUT = 10000;
 
 /* setup the serial line */
 void setup()
@@ -24,7 +25,7 @@ void set_motor(char array[])
    for 2 seconds */
 void motorsecuritycheck()
 {
-	if(millis() - lasttime > 2000)
+	if(millis() - lasttime > SECURETIMEOUT)
 	{
 		char array[4] = {0,0,0,0};
 		set_motor(array);
@@ -64,7 +65,9 @@ void loop()
 	/* send the received bytes back */
 	for (int i=0; i <= 3; i++)
 		Serial.print(array[i], BYTE);
-
+        
 	Serial.println();
+        set_motor(array);
+
 	delay(10);
 }
