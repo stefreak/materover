@@ -1,4 +1,5 @@
 long lasttime;
+byte SYNCBYTE = 0x58;
 
 /* setup the serial line */
 void setup()
@@ -45,20 +46,25 @@ void loop()
 	char array[4] = {0,0,0,0};
 	lasttime = millis();
 
-	/* wait for 0xff */
-	/*while (true) if (read_byte() == 0xff);*/
+	/* wait for sync byte */
+	while (true) {
+          if (read_byte() == SYNCBYTE) {
+            break;
+          }
+        }
 
 	/* receive the 4 bytes */
 	for (int i=0; i <= 3; i++)
 	{
 		array[i] = read_byte();
-		/* if 0xff is received reset receive loop */
-		if (array[i] == 0xff) i = -1;
+		/* if stop byte is received reset receive loop */
+		if (array[i] == SYNCBYTE) i = -1;
 	}
  
 	/* send the received bytes back */
 	for (int i=0; i <= 3; i++)
-		Serial.print(array[i],  BYTE);
+		Serial.print(array[i], BYTE);
 
+	Serial.println();
 	delay(10);
 }
