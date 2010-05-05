@@ -9,7 +9,7 @@ import threading
 import Queue
 import time
 
-SERIAL_DEVICE = "/dev/ugen1.2"
+SERIAL_DEVICE = "/dev/ttyUSB0"
 SERIAL_DEBUG = False
 SYNCBYTE = 0xff
 
