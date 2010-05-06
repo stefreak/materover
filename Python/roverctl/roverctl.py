@@ -8,10 +8,15 @@ import serial
 import threading
 import Queue
 import time
+from math import ceil, floor
 
 SERIAL_DEVICE = "/dev/ttyUSB0"
 SERIAL_DEBUG = True
 SYNCBYTE = 0xff
+
+def ceilfloor(num):
+	if num > 0: return ceil(num)
+	if num <= 0: return floor(num)
 
 class SerialThread(threading.Thread):
 	def __init__(self, device, queue):
@@ -48,10 +53,8 @@ class SerialThread(threading.Thread):
 
 			# increment/decrement real_state
 			for i in range(2):
-				if self.state[i-1] > self.real_state[i-1]:
-					self.real_state[i-1] += (self.state[i-1] - self.real_state[i-1])/8+1
-				elif self.state[i-1] < self.real_state[i-1]:
-					self.real_state[i-1] -= (self.real_state[i-1] - self.state[i-1])/8+1 
+				if self.state[i-1] != self.real_state[i-1]:
+					self.real_state[i-1] += ceilfloor((self.state[i-1] - self.real_state[i-1])/8)
 
 			# calculate the data for the arduino
 			bytes = [0,0,0,0]
