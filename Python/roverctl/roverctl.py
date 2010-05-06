@@ -10,7 +10,7 @@ import Queue
 import time
 
 SERIAL_DEVICE = "/dev/ttyUSB0"
-SERIAL_DEBUG = False
+SERIAL_DEBUG = True
 SYNCBYTE = 0xff
 
 class SerialThread(threading.Thread):
